@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "openvpn.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "openvpn.name" . }}
     chart: {{ template "openvpn.chart" . }}
@@ -29,14 +30,14 @@ spec:
         {{- end }}
     spec:
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: lifecycle
-                operator: In
-                values:
-                - ondemand
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: {{ template "openvpn.name" . }}
+              weight: 100
 {{- if .Values.ipForwardInitContainer }}
       initContainers:
         - args:
@@ -163,4 +164,3 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.imagePullSecretName }}
 {{- end -}}
-
