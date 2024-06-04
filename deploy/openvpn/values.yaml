@@ -10,7 +10,8 @@ updateStrategy:
 # imagePullSecretName:
 
 image:
-  repository: k4kratik/openvpn
+#  repository: k4kratik/openvpn
+  repository: 168779575847.dkr.ecr.ap-northeast-2.amazonaws.com/openvpn
   tag: v1
   pullPolicy: IfNotPresent
 service:
@@ -24,13 +25,14 @@ service:
   # loadBalancerIP: 10.0.0.1
 
   ## Here annotations can be added to the openvpn service
-  # annotations:
-  #   external-dns.alpha.kubernetes.io/hostname: vpn.example.com
-  annotations: {}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: vpn-test.payhere.dev
+#  annotations: {}
 ## Here annotations can be added to the openvpn pod
 # podAnnotations:
 #   backup.ark.heptio.com/backup-volumes: certs
-podAnnotations: {}
+podAnnotations:
+  sidecar.istio.io/inject: "false"
 
 # Add privileged init container to enable IPv4 forwarding
 ipForwardInitContainer: true
@@ -78,7 +80,7 @@ openvpn:
   # Kubernetes pod network subnet (optional).
   OVPN_K8S_POD_SUBNET: "255.255.0.0"
   # Kubernetes service network (optional).
-  # Define openvpn.OVPN_K8S_SVC_NETWORK and openvpn.OVPN_K8S_SVC_SUBNET if it's needed to create a separate route to Kubernates service subnet
+  # Define openvpn.OVPN_K8S_SVC_NETWORK and openvpn.OVPN_K8S_SVC_SUBNET if it's needed to create a separate route to Kubernetes service subnet
   OVPN_K8S_SVC_NETWORK: "10.100.0.0"
   # Kubernetes service network subnet (optional).
   OVPN_K8S_SVC_SUBNET: "255.255.0.0"

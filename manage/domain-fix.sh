@@ -12,4 +12,5 @@ for DOMAIN in "${CLUSTER_1_DOMAINS[@]}"; do
     touch $DOMAIN
     echo "domain $DOMAIN
 nameserver $CLUSTER_1_NS" >$DOMAIN
+    echo "nameserver 8.8.8.8" >>$DOMAIN
 done
